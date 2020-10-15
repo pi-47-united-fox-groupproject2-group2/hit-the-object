@@ -14,6 +14,7 @@
 
       </div>
         <button class="btn btn-primary" @click.prevent="scoreAdd">add</button>
+        {{ countDown }}
   </div>
 </template>
 
@@ -25,7 +26,8 @@ export default {
   data () {
     return {
       username:'',
-      dataUser:[]
+      dataUser:[],
+      countDown: 20
     }
   },
   sockets:{
@@ -43,13 +45,24 @@ export default {
       this.$store.commit('changeUsername', this.username)
     },
     scoreAdd () {
-    this.$socket.emit('add_score',{username:this.usernameStore})
-  }
+      this.$socket.emit('add_score',{username:this.usernameStore})
+    },
+    countDownTimer () {
+      if(this.countDown > 0) {
+        setTimeout(() => {
+            this.countDown -= 1
+            this.countDownTimer()
+        }, 1000)
+      }
+    }
   },
   computed:{
     usernameStore(){
       return this.$store.state.username
     }
+  },
+  created () {
+    this.countDownTimer()
   }
 }
 </script>
