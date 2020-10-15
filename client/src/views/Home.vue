@@ -1,6 +1,7 @@
 <template>
   <div class="home container">
       <input type="text" v-model="username">
+      <div>{{ usernameStore }}</div>
       <button @click.prevent="onSubmitUser">submit username</button>
       <div class="container row">
         <div class="col-4" 
@@ -37,12 +38,18 @@ export default {
   },
   methods:{
     onSubmitUser () {
-      localStorage.setItem('username',this.username)
+      // localStorage.setItem('username',this.username)
       this.$socket.emit('emit_new_user',{username:this.username,score:0})
+      this.$store.commit('changeUsername', this.username)
     },
     scoreAdd () {
-    this.$socket.emit('add_score',{username:localStorage.username})
+    this.$socket.emit('add_score',{username:this.usernameStore})
   }
+  },
+  computed:{
+    usernameStore(){
+      return this.$store.state.username
+    }
   }
 }
 </script>
