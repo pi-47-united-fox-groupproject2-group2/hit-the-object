@@ -5,10 +5,11 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    username:''
+    username: '',
+    players: []
   },
   mutations: {
-    changeUsername (state,payload){
+    changeUsername (state, payload) {
       state.username = payload
     }
   },
