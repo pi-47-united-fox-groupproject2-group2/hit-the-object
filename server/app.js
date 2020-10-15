@@ -16,6 +16,7 @@ console.log('a user connected');
   // tangkep new user
   socket.on('emit_new_user', (data)=>{
     listUser.push(data)
+    console.log (data)
     io.emit('get_user', listUser)
   })
 
