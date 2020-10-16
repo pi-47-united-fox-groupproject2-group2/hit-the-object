@@ -1,70 +1,124 @@
 <template>
-  <div>
-    <h1>Hi {{username}}, Your on Public Room</h1>
-    <center>
-      <div class="row container mt-3"
-      style="justify-content:center"
-      >
-      <div class="col-1 userboard"
-       v-for="(user,i) in dataUser"
-       :key="i">
-        <div>{{user.username}}</div>
-        <div>{{user.score}}</div>
+  <div class="sec game-dashboard">
+    <div class="leaderboard">
+
+      <h2 class="title">Leader Board:</h2>
+      <div class="all-joined row container mt-3" style="justify-content:center">
+        <div class="card player-card" v-for="(user, i) in dataUser" :key="i">
+          <h2>{{ user.username }}</h2>
+          <h4>score: {{ user.score }}</h4>
+        </div>
       </div>
-    </div> 
-    </center> 
-    <Board
-    @addScoreUser="addScoreUser"
-    ></Board>
+    </div>
+    <div class="sec gamePlay">
+    <Board @addScoreUser="addScoreUser"></Board>
+    </div>
   </div>
 </template>
 
 <script>
-import Board from '../components/Board'
+import Board from "../components/Board";
 export default {
-  
-  name:'Lounge',
-  data () { 
+  name: "Lounge",
+  data() {
     return {
-      dataUser:[]
+      dataUser: []
+    };
+  },
+  methods: {
+    addScoreUser() {
+      console.log("masuk emit vue");
+      this.$socket.emit("add_score", { username: localStorage.username });
     }
   },
-  methods:{
-    addScoreUser(){
-      console.log('masuk emit vue')
-      this.$socket.emit('add_score',{username:localStorage.username})
-    }
-  },
-  components:{
+  components: {
     Board
   },
   sockets: {
-    get_data: function (data) {
-      this.dataUser = data
-      console.log(data,'datadari socket')
+    get_data: function(data) {
+      this.dataUser = data;
+      console.log(data, "datadari socket");
     },
-    get_user: function (data) {
-      this.dataUser = data
+    get_user: function(data) {
+      this.dataUser = data;
     }
   },
   computed: {
-    username () {
-      return this.$store.state.username
+    username() {
+      return this.$store.state.username;
     }
   },
-  created () {
-    console.log('masuk created lounge')
-    this.$socket.emit('get_user_data')
+  created() {
+    console.log("masuk created lounge");
+    this.$socket.emit("get_user_data");
   }
-}
+};
 </script>
 
 <style lang="scss">
-h1 {
-    text-align: center;
-    color: white;
+@import url('https://fonts.googleapis.com/css?family=Bangers');
+$main-font :'Bangers', cursive;
+
+.game-dashboard {
+  display: flex;
+
+  .leaderboard {
+    min-width: 30%;
+    text-align: center;;
+
+    .title {
+      font-family: $main-font;
+      color: white;
+    }
+
+    .all-joined {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      flex-wrap: wrap;
+      font-family: $main-font;
+
+      .card {
+        margin-top: 10px;
+        background: none;
+        border-color: white;
+        border-width: 3px 3px 5px 5px;
+        border-radius:4% 95% 6% 95%/95% 4% 92% 5%;
+        transform: rotate(-2deg);
+
+        &:hover {
+        transform: rotate(-4deg);
+        }
+      }
+
+      .player-card {
+        text-align: center;
+        min-width: 200px;
+        min-height: 100px;
+        max-width: 300px;
+
+        h2 {
+          padding: 10px;
+          color: white;
+        }
+
+        h4 {
+          padding: 10px;
+          color: white;
+        }
+      }
+    }
+  }
 }
-.userboard{
+
+
+h1 {
+  text-align: center;
+  color: white;
+      font-family: $main-font;
+
+}
+.userboard {
   color: white;
 }
 </style>
