@@ -6,14 +6,14 @@
 
 <script>
 export default {
-    sockets: {
+  sockets: {
     user_Connected: function (data) {
-      console.log(data, "dari APP")
+      
     },
     get_user: function (data) {
       this.dataUser = data
     }
-    },
+  }
 }
 </script>
 

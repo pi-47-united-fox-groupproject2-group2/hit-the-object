@@ -10,7 +10,6 @@ app.get('/', (req, res) => {
   });
 
 io.on('connection', (socket) => {
-console.log('a user connected');
   io.emit('user_Connected',{message:'welcome to socket'})
 
   //get data
@@ -22,12 +21,10 @@ console.log('a user connected');
   // tangkep new user
   socket.on('emit_new_user', (data)=>{
     listUser.push(data)
-    console.log (data)
     io.emit('get_user', listUser)
   })
 
   socket.on('add_score', (data)=>{
-    console.log('masuk add_score',data)
     listUser.forEach(val=>{
       if(val.username === data.username){
         val.score++
@@ -44,6 +41,11 @@ console.log('a user connected');
   socket.on('get_random_number', ()=>{
     let random = Math.floor(Math.random() * 9 + 1);
     io.emit('get_random_number', random)
+  })
+
+  socket.on('finish_game', ()=>{
+    listUser = []
+    io.emit('get_user', listUser)
   })
 });
 

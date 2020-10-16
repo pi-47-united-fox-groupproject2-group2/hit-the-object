@@ -33,10 +33,10 @@ export default {
   },
   methods: {
     onSubmitUser () {
-       if (this.inputUserName === '') {
+      if (this.inputUserName === '') {
         this.placeholder = 'enter name  here!'
       } else {
-        localStorage.setItem('username',this.inputUserName)
+        localStorage.setItem('username', this.inputUserName)
         this.$socket.emit('emit_new_user', { username: this.inputUserName, score: 0 })
         this.$store.commit('changeUsername', this.inputUserName)
         this.$router.push('/lounge')
