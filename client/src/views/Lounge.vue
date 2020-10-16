@@ -110,7 +110,9 @@ $main-font :'Bangers', cursive;
       
       &::-webkit-scrollbar {
         display: none;
-      } 
+      }
+      -ms-overflow-style: none;
+      scrollbar-width: none;
 
       .card {
         margin-top: 10px;
