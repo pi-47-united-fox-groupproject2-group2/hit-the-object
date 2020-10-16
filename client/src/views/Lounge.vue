@@ -15,6 +15,7 @@
     </center> 
     <Board
     @addScoreUser="addScoreUser"
+    @finish="finish"
     ></Board>
   </div>
 </template>
@@ -33,6 +34,21 @@ export default {
     addScoreUser(){
       console.log('masuk emit vue')
       this.$socket.emit('add_score',{username:localStorage.username})
+    },
+    finish() {
+      let winner = {
+        score: 0
+      }
+      this.dataUser.forEach((el) => {
+        if (el.score > winner.score) {
+          winner = el
+        }
+      })
+      if (winner.username === this.username) {
+        Swal.fire(`Congratulation ${this.username}, you've Won!`)
+      } else {
+        Swal.fire(`Sorry ${this.username}, you've Lost!`)
+      }
     }
   },
   components:{

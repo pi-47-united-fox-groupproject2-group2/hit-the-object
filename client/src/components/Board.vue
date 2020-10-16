@@ -67,6 +67,7 @@ export default {
         clearInterval(randomPos);
         this.randomNumber = 100;
         this.currentNumber = 100;
+        this.$emit('finish')
       }, 11000);
     },
     countDown() {
