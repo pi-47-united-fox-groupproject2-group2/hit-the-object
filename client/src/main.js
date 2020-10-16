@@ -5,9 +5,12 @@ import store from './store'
 import VueSocketIO from 'vue-socket.io'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import VuePageTransition from 'vue-page-transition'
+ 
 
 Vue.config.productionTip = false
 
+Vue.use(VuePageTransition)
 Vue.use(new VueSocketIO({
   debug: true,
   connection: 'http://localhost:3000',
