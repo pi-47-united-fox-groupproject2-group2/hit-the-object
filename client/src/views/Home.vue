@@ -1,5 +1,5 @@
 <template>
-  <div class="home container">
+  <!-- <div class="home container">
       <input type="text" v-model="username">
       <div>{{ usernameStore }}</div>
       <button @click.prevent="onSubmitUser">submit username</button>
@@ -15,14 +15,21 @@
       </div>
         <button class="btn btn-primary" @click.prevent="scoreAdd">add</button>
         {{ countDown }}
+  </div> -->
+  <div>
+    <Welcome/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
+import Welcome from '../components/Welcome'
 
 export default {
   name: 'Home',
+  components:{
+    Welcome
+  },
   data () {
     return {
       username:'',
@@ -40,12 +47,13 @@ export default {
   },
   methods:{
     onSubmitUser () {
-      // localStorage.setItem('username',this.username)
+      localStorage.setItem('username',this.username)
       this.$socket.emit('emit_new_user',{username:this.username,score:0})
       this.$store.commit('changeUsername', this.username)
+      
     },
     scoreAdd () {
-      this.$socket.emit('add_score',{username:this.usernameStore})
+      this.$socket.emit('add_score',{username:localStorage.username})
     },
     countDownTimer () {
       if(this.countDown > 0) {

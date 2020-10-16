@@ -26,16 +26,16 @@ export default {
     }
   },
   sockets: {
-    user_Connected: function (data) {
-      console.log(data, '<><><><>')
-    },
+    // user_Connected: function (data) {
+    //   console.log(data, '<><><><>')
+    // },
     get_user: function (data) {
       this.dataUser = data
     }
   },
   methods: {
     onSubmitUser () {
-      // localStorage.setItem('username',this.username)
+      localStorage.setItem('username',this.inputUserName)
       this.$socket.emit('emit_new_user', { username: this.inputUserName, score: 0 })
       this.$store.commit('changeUsername', this.inputUserName)
       this.$router.push('/lounge')

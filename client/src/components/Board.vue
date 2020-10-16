@@ -1,23 +1,25 @@
 <template>
   <div>
     <h1>Whack a mole!</h1>
+    <center>
+      <h2>Your score:</h2>
+      <h2 id="score">{{ score }}</h2>
 
-    <h2>Your score:</h2>
-    <h2 id="score">{{ score }}</h2>
+      <h2>Seconds left:</h2>
+      <h2 id="time-left">{{ timer }}</h2>
 
-    <h2>Seconds left:</h2>
-    <h2 id="time-left">{{ timer }}</h2>
+      <div class="grid">
+        <div
+          v-for="buttonNumber in 9"
+          :key="buttonNumber"
+          :class="buttonClass(buttonNumber)"
+          @click.prevent="answer(buttonNumber)"
+        ></div>
+      </div>
 
-    <div class="grid">
-      <div
-        v-for="buttonNumber in 9"
-        :key="buttonNumber"
-        :class="buttonClass(buttonNumber)"
-        @click.prevent="answer(buttonNumber)"
-      ></div>
-    </div>
+      <button class="btn btn-lg btn-dark" @click="onStartButtonHandler()">Start</button>
+    </center>
 
-    <button class="btn btn-lg btn-dark" @click="start()">Start</button>
   </div>
 </template>
 
@@ -25,19 +27,33 @@
 export default {
   data() {
     return {
-      timer: 60,
+      timer: 10,
       score: 0,
-      currentNumber: 0
+      currentNumber: 0,
+      randomNumber:1
     };
+  },
+  sockets:{
+    start_game_go: function(){
+      this.start()
+    },
+    get_random_number: function(data){
+      this.randomNumber = data
+    }
   },
   methods: {
     answer(number) {
       if (number == this.currentNumber) {
         this.score++;
+        this.$emit('addScoreUser')
         this.setRandomNumber();
       }
     },
+    onStartButtonHandler() {
+      this.$socket.emit('start_game')
+    },
     start() {
+      // this.$socket.emit('start_game')
       let time = setInterval(() => {
         this.countDown();
       }, 1000);
@@ -47,13 +63,15 @@ export default {
       setTimeout(() => {
         clearInterval(time);
         clearInterval(randomPos);
-      }, 61000);
+      }, 11000);
     },
     countDown() {
       this.timer--;
     },
     setRandomNumber() {
-      this.currentNumber = Math.floor(Math.random() * 9 + 1);
+      // this.currentNumber = Math.floor(Math.random() * 9 + 1);
+      this.$socket.emit('get_random_number')
+      this.currentNumber = this.randomNumber
     },
     buttonClass(number) {
       let classNames = ["square"];
