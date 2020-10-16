@@ -34,17 +34,30 @@ export default {
       let winner = {
         score: 0
       }
+      let showScore = null
+      let notes = 'Boards:'
       this.dataUser.forEach((el) => {
         if (el.score > winner.score) {
           winner = el
+          showScore = el.score
         }
+        notes += `<br> ${el.username} : ${el.score}`
       })
       if (winner.username === this.username) {
-        Swal.fire(`Congratulation ${this.username}, you've Won!`)
+        Swal.fire({
+          title: `Congratulation ${this.username},`,
+          html: `you've Won with ${showScore} hit!! <br><br> ${notes}`,
+          allowOutsideClick: false
+      })
       } else {
-        Swal.fire(`Sorry ${this.username}, you've Lost!`)
+        Swal.fire({
+          title:`Sorry ${this.username}, you've Lost!!`,
+          text: notes,
+          allowOutsideClick: false
+        })
       }
       this.$socket.emit('finish_game')
+      localStorage.removeItem('username')
       router.push({ path: '/' })
     }
   },
