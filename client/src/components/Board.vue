@@ -1,12 +1,14 @@
 <template>
   <div>
-    <h1>Whack a mole!</h1>
-    <center>
-      <h2>Your score:</h2>
-      <h2 id="score">{{ score }}</h2>
+    <h1>Hit the Shape!</h1>
+    <center class="main">
+      <!-- <h2>Your score: <span id="score">{{ score }}</span></h2> -->
 
-      <h2>Seconds left:</h2>
-      <h2 id="time-left">{{ timer }}</h2>
+      <h2><span id="time-left">{{ timer }}</span> Seconds left</h2>
+      
+      <div id="start" v-if="!started">
+       <button class="start-button" @click="onStartButtonHandler()">Start</button>
+      </div>
 
       <div class="grid">
         <div
@@ -16,8 +18,6 @@
           @click.prevent="answer(buttonNumber)"
         ></div>
       </div>
-
-      <button v-show="isStart === false" class="btn btn-lg btn-dark" @click="onStartButtonHandler()">Start</button>
     </center>
 
   </div>
@@ -31,7 +31,7 @@ export default {
       score: 0,
       currentNumber: 0,
       randomNumber:1,
-      isStart: false
+      started: false
     };
   },
   sockets:{
@@ -56,6 +56,7 @@ export default {
     },
     start() {
       // this.$socket.emit('start_game')
+      this.started = true
       let time = setInterval(() => {
         this.countDown();
       }, 1000);
@@ -89,25 +90,71 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+@import url('https://fonts.googleapis.com/css?family=Bangers');
+$main-font :'Bangers', cursive;
+
+h2 {
+  font-family: $main-font;
+
+  span {
+    font-weight: 900;
+  }
+}
+
+.main {
+  color: white;
+}
+
 .square {
-  width: 200px;
-  height: 200px;
-  border-style: solid;
-  border-color: black;
+  width: 100px;
+  height: 150px;
 }
 
 .grid {
+  width: 700px;
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
   align-content: center;
-  width: 618px;
-  height: 618px;
+
+  div {
+  flex: 0 0 30%;
+  margin: 10px;
+  }
 }
 
 .mole {
-  background-color: black;
-  background-size: cover;
+  background-color: white;
+  border-width: 3px 3px 5px 5px;
+  border-radius:4% 95% 6% 95%/95% 4% 92% 5%;
+  transform: rotate(5deg);
+  transition: 1s;
+
+  &:hover {
+    transform: rotate(-5deg);
+  }
 }
+
+ #start { 
+        transition: 0.4s;
+        width: 100%;
+
+        .start-button {
+            background:#ddd;
+            border:1px solid #222;
+            box-shadow:3px 3px 0 #222;
+            font-family: 'Bangers', cursive;
+            margin: 1rem;
+            width: 100px;
+            font-size: 2rem;
+            color: #222;
+            transition: 0.4s;
+            text-decoration: none;
+
+            &:active {
+              transform: scale(0.5);
+        }
+        }
+    }
 </style>

@@ -4,7 +4,7 @@
         <h1>Hit The Shape</h1>
     </div>
     <div id="player-name">
-        <input type="text" v-model="inputUserName" placeholder="player name" />
+        <input type="text" v-model="inputUserName" :placeholder="placeholder" />
     </div>
     <div id="start">
         <a href="#" @click.prevent="onSubmitUser" class="start-button">Start</a>
@@ -17,7 +17,8 @@ export default {
   name: 'MainHome',
   data () {
     return {
-      inputUserName: ''
+      inputUserName: '',
+      placeholder: 'enter  name'
     }
   },
   computed: {
@@ -26,19 +27,20 @@ export default {
     }
   },
   sockets: {
-    // user_Connected: function (data) {
-    //   console.log(data, '<><><><>')
-    // },
     get_user: function (data) {
       this.dataUser = data
     }
   },
   methods: {
     onSubmitUser () {
-      localStorage.setItem('username',this.inputUserName)
-      this.$socket.emit('emit_new_user', { username: this.inputUserName, score: 0 })
-      this.$store.commit('changeUsername', this.inputUserName)
-      this.$router.push('/lounge')
+       if (this.inputUserName === '') {
+        this.placeholder = 'enter name  here!'
+      } else {
+        localStorage.setItem('username',this.inputUserName)
+        this.$socket.emit('emit_new_user', { username: this.inputUserName, score: 0 })
+        this.$store.commit('changeUsername', this.inputUserName)
+        this.$router.push('/lounge')
+      }
     }
   }
 }
@@ -78,13 +80,18 @@ export default {
 
             &:focus {
                 border-color: #fff;
-                border-width: 0 0 6px;
             }
         }
     }
 
     #start {
         margin-top: 2rem;
+        transition: 0.4s;
+
+        &:active {
+              transform: scale(0.5);
+        }
+
         .start-button {
             background:#ddd;
             border:1px solid #222;
