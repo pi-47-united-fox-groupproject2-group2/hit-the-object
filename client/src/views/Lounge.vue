@@ -92,7 +92,7 @@ $main-font :'Bangers', cursive;
 
   .leaderboard {
     min-width: 30%;
-    text-align: center;;
+    text-align: center;
 
     .title {
       font-family: $main-font;
@@ -100,11 +100,17 @@ $main-font :'Bangers', cursive;
     }
 
     .all-joined {
+     overflow: scroll;
+      max-height: 95vh;
       display: flex;
       align-items: center;
       flex-direction: column;
       flex-wrap: wrap;
       font-family: $main-font;
+      
+      &::-webkit-scrollbar {
+        display: none;
+      } 
 
       .card {
         margin-top: 10px;
