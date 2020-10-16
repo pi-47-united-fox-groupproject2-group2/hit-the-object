@@ -17,7 +17,7 @@
         ></div>
       </div>
 
-      <button class="btn btn-lg btn-dark" @click="onStartButtonHandler()">Start</button>
+      <button v-show="isStart === false" class="btn btn-lg btn-dark" @click="onStartButtonHandler()">Start</button>
     </center>
 
   </div>
@@ -30,7 +30,8 @@ export default {
       timer: 10,
       score: 0,
       currentNumber: 0,
-      randomNumber:1
+      randomNumber:1,
+      isStart: false
     };
   },
   sockets:{
@@ -51,6 +52,7 @@ export default {
     },
     onStartButtonHandler() {
       this.$socket.emit('start_game')
+      this.isStart = true
     },
     start() {
       // this.$socket.emit('start_game')
@@ -63,6 +65,8 @@ export default {
       setTimeout(() => {
         clearInterval(time);
         clearInterval(randomPos);
+        this.randomNumber = 100;
+        this.currentNumber = 100;
       }, 11000);
     },
     countDown() {
