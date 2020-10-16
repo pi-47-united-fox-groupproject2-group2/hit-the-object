@@ -17,20 +17,20 @@
 </template>
 
 <script>
-import Board from "../components/Board";
+import Board from '../components/Board'
+import router from '../router'
 export default {
-  name: "Lounge",
-  data() {
+  name: 'Lounge',
+  data () {
     return {
       dataUser: []
-    };
+    }
   },
-  methods:{
-    addScoreUser(){
-      console.log('masuk emit vue')
-      this.$socket.emit('add_score',{username:localStorage.username})
+  methods: {
+    addScoreUser () {
+      this.$socket.emit('add_score', { username: localStorage.username })
     },
-    finish() {
+    finish () {
       let winner = {
         score: 0
       }
@@ -44,29 +44,30 @@ export default {
       } else {
         Swal.fire(`Sorry ${this.username}, you've Lost!`)
       }
+      this.$socket.emit('finish_game')
+      router.push({ path: '/' })
+    }
   },
   components: {
     Board
   },
   sockets: {
-    get_data: function(data) {
-      this.dataUser = data;
-      console.log(data, "datadari socket");
+    get_data: function (data) {
+      this.dataUser = data
     },
-    get_user: function(data) {
-      this.dataUser = data;
+    get_user: function (data) {
+      this.dataUser = data
     }
   },
   computed: {
-    username() {
-      return this.$store.state.username;
+    username () {
+      return this.$store.state.username
     }
   },
-  created() {
-    console.log("masuk created lounge");
-    this.$socket.emit("get_user_data");
+  created () {
+    this.$socket.emit('get_user_data')
   }
-};
+}
 </script>
 
 <style lang="scss">
@@ -124,7 +125,6 @@ $main-font :'Bangers', cursive;
     }
   }
 }
-
 
 h1 {
   text-align: center;

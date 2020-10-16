@@ -2,10 +2,8 @@
   <div>
     <h1>Hit the Shape!</h1>
     <center class="main">
-      <!-- <h2>Your score: <span id="score">{{ score }}</span></h2> -->
-
       <h2><span id="time-left">{{ timer }}</span> Seconds left</h2>
-      
+
       <div id="start" v-if="!started">
        <button class="start-button" @click="onStartButtonHandler()">Start</button>
       </div>
@@ -25,69 +23,73 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
-      timer: 10,
+      timer: 15,
       score: 0,
       currentNumber: 0,
-      randomNumber:1,
+      randomNumber: 1,
       started: false
-    };
+    }
   },
-  sockets:{
-    start_game_go: function(){
+  sockets: {
+    start_game_go: function () {
       this.start()
     },
-    get_random_number: function(data){
+    get_random_number: function (data) {
       this.randomNumber = data
     }
   },
   methods: {
-    answer(number) {
+    playSound () {
+      const sound = require('../assets/sound.wav')
+      var audio = new Audio(sound)
+      audio.play()
+    },
+    answer (number) {
       if (number == this.currentNumber) {
-        this.score++;
+        this.score++
         this.$emit('addScoreUser')
-        this.setRandomNumber();
+        this.setRandomNumber()
+        this.playSound()
       }
     },
-    onStartButtonHandler() {
+    onStartButtonHandler () {
       this.$socket.emit('start_game')
       this.isStart = true
     },
-    start() {
-      // this.$socket.emit('start_game')
+    start () {
       this.started = true
-      let time = setInterval(() => {
-        this.countDown();
-      }, 1000);
-      let randomPos = setInterval(() => {
-        this.setRandomNumber();
-      }, 500);
+      const time = setInterval(() => {
+        this.countDown()
+      }, 1000)
+      const randomPos = setInterval(() => {
+        this.setRandomNumber()
+      }, 600)
       setTimeout(() => {
-        clearInterval(time);
-        clearInterval(randomPos);
-        this.randomNumber = 100;
-        this.currentNumber = 100;
+        clearInterval(time)
+        clearInterval(randomPos)
+        this.randomNumber = 100
+        this.currentNumber = 100
         this.$emit('finish')
-      }, 11000);
+      }, 15000)
     },
-    countDown() {
-      this.timer--;
+    countDown () {
+      this.timer--
     },
-    setRandomNumber() {
-      // this.currentNumber = Math.floor(Math.random() * 9 + 1);
+    setRandomNumber () {
       this.$socket.emit('get_random_number')
       this.currentNumber = this.randomNumber
     },
-    buttonClass(number) {
-      let classNames = ["square"];
+    buttonClass (number) {
+      const classNames = ['square']
       if (number == this.currentNumber) {
-        classNames.push("mole");
+        classNames.push('mole')
       }
-      return classNames;
+      return classNames
     }
   }
-};
+}
 </script>
 
 <style lang="scss">
@@ -136,7 +138,7 @@ h2 {
   }
 }
 
- #start { 
+ #start {
         transition: 0.4s;
         width: 100%;
 
