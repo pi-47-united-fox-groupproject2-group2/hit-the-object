@@ -52,7 +52,7 @@ export default {
       } else {
         Swal.fire({
           title:`Sorry ${this.username}, you've Lost!!`,
-          text: notes,
+          html: notes,
           allowOutsideClick: false
         })
       }
