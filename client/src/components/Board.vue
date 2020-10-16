@@ -52,6 +52,7 @@ export default {
     },
     onStartButtonHandler() {
       this.$socket.emit('start_game')
+      this.isStart = true
     },
     start() {
       // this.$socket.emit('start_game')
@@ -65,6 +66,8 @@ export default {
       setTimeout(() => {
         clearInterval(time);
         clearInterval(randomPos);
+        this.randomNumber = 100;
+        this.currentNumber = 100;
       }, 11000);
     },
     countDown() {
